@@ -1,0 +1,34 @@
+name: Alerta de Push en Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  enviar-notificacion:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código fuente
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2. Configurar entorno de Node.js y ejecutar el programa
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ejecutar Hola Mundo
+        run: node index.js
+
+      # 3. Enviar la notificación HTTP a ntfy.sh
+      - name: Notificar a ntfy.sh
+        run: |
+          curl \
+            -H "Title: Nuevo Push en Main 🚀" \
+            -H "Priority: default" \
+            -H "Tags: github,rocket" \
+            -d "Se ha subido nuevo código exitosamente a la rama main." \
+            https://ntfy.sh/devops-itla
